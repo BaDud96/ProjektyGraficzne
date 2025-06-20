@@ -1,0 +1,158 @@
+//+UA +FN8 
+//+W600 +H600   // szerokoœæ i wysokoœæ obrazu
+
+#include "colors.inc"
+#include "math.inc" 
+
+
+camera {
+    location <0, 2, -7>
+    look_at <0, 0, 0>   
+    right x*image_width/image_height
+}
+
+light_source {
+  0.8*x
+  color Grey
+  spotlight
+  cylinder
+  translate <1, 1, -10>
+  point_at <0, 0, 0>
+  radius 8
+  tightness 5
+  falloff 10
+}
+
+light_source { <3, 5, -10>
+    color rgb <1, 1, 1>
+}
+
+#declare MeridSteps = 10;
+#declare LatSteps = 10;
+ 
+sphere { <0, 0, 0>, 2.5
+    texture {pigment { color rgb <0, 0, 0> }
+        finish {
+            diffuse 0.1
+            specular 0.25
+        }
+    }
+    scale <1, 1, 0>
+}
+
+sphere {
+    <0.05, -0.19, 0>, 2.5
+    texture { pigment { color rgbt <0, 0.4, 1,0.1> }
+        finish {
+            diffuse 1
+            specular 3
+        }
+    }
+    scale <1.14, 1.12, 0.6>
+}
+ 
+#for (M, 1, MeridSteps)
+    #declare phi = M * pi / MeridSteps;
+    #declare x_pos = cos(phi);
+    #if ((x_pos>-1) & (x_pos < 1))
+        torus { 2.5, 0.03
+            rotate <-6, 0, 90>
+            rotate <0, degrees(phi), 0>
+            texture { pigment { color rgbt <0.179, 0.179, 0.179, 0.5>}
+                    scale <1, 2.5, 1>
+                    translate <0, -1.25, 0>
+                }
+                finish { phong 0.1 reflection 0.5}
+            }
+    #end
+#end
+
+// Równole¿niki
+#for (L, 1, LatSteps - 1)
+    #declare theta = L * pi / LatSteps;
+    #declare r = 2.5 * sin(theta);
+    #declare poz_y = 2.5 * cos(theta);
+    torus {
+        r, 0.03
+        translate <0, poz_y, 0>
+        rotate <0, 0, 0>
+        texture {pigment {color rgbt <0.179, 0.179, 0.179,0.5>}
+            
+            finish { phong 0.1 reflection 0.5 }
+        }
+    }
+#end
+
+torus {
+    2, 0.09    
+    no_shadow
+    rotate <-4, 0, 90>
+    texture { pigment { gradient x
+            color_map {
+                [0 rgb <0, 0.4, 1>]
+                [2 rgbt <0,0,0,0.5>]}
+        }
+        finish {
+            phong 1
+            specular 0.3
+        }
+    }
+    translate <0.05, 0.44, -1.7>
+}
+
+// Tekst
+text {
+    ttf "Arial Rounded MT Regular.ttf", "v", -0.6, -1
+    no_shadow
+    texture { pigment { color_map {
+                [0 rgbt <0.00, 0.00, 0, 0.2>]
+                [0.7 rgbt <0.00, 0.00, 0, 0.5>]}
+        }
+        finish { phong 0.1 specular 0.1 }
+    }
+    scale <4.5, 3, 0.1>
+    rotate <0, 0, -90>
+    translate <-1.4, 2.17, -2.7>
+}
+
+text {
+    ttf "Arial Rounded MT Regular.ttf", "v", -0.6, -1
+    no_shadow
+    texture { pigment { color_map {
+                [0 rgbt <0.00, 0.00, 0, 0.2>]
+                [0.7 rgbt <0.00, 0.00, 0, 0.5>]}
+        }
+        finish { phong 0.1 specular 0.1 }
+    }
+    scale <4.3, 3, 0.1>
+    rotate <0, 0, -90>
+    translate <-1.45, 1.15, -2.7>
+}
+
+text {
+    ttf "Arial Rounded MT Bold Regular.ttf", "v", 0.1, 0
+    texture { pigment { gradient y
+            color_map {
+                [0 rgbt <0, 0.4, 1, 0.9>]
+                [0.7 rgbt <0.00, 0.00, 0, 0.5>]}
+        }
+        finish { specular 0.1 }
+    }
+    scale <5, 3.8, 1>
+    rotate <0, 0, -90>
+    translate <-1.65, 1.26, -2.5>
+}
+
+text { 
+    ttf "Arial Rounded MT Bold Regular.ttf", "v", 0.1, 0
+    texture { pigment { gradient y
+            color_map {
+                [0 rgbt <0, 0.4, 1, 0.9>]
+                [0.7 rgbt <0.00, 0.00, 0, 0.5>]}
+        }
+        finish { specular 0.1 }
+    }
+    scale <4.95, 3.4, 1>
+    rotate <0, 0, -90>
+    translate <-1.55, 2.3, -2.6>
+}
